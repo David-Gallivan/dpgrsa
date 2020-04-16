@@ -2,7 +2,7 @@
 
 // largeinteger.c
 
-#include <largeIntegers.h>
+#include "largeinteger.h"
 
 // nthPowerOfTwo
 int nthPowerOfTwo(mpz_t power, int n)

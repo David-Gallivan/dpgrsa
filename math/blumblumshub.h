@@ -6,9 +6,10 @@
 #define __BLUMBLUMSHUB_H__
 
 #include <stdlib.h>
+#include <gmp.h>
 
-#define BBS_PRIME_P 1000003
-#define BBS_PRIME_Q 2001991
+const char* bbsPrimeP = "1000003";
+const char* bbsPrimeQ = "2001991";
 
 // struct bbsFrame
 //
@@ -18,8 +19,8 @@
 //  data generation functions
 struct bbsFrame
 {
-  long int x;
-  long int n;
+  mpz_t seed;  // Begins as the seed and is updated
+  mpz_t modulus;  // The modulus
 };
 
 // bbsInit
@@ -34,7 +35,7 @@ struct bbsFrame* bbsInit(long int seed);
 // Updates the frame passed in and
 //  returns a pseudorandom digit,
 //  1 or 0.
-int bbsDigit(struct bbsFrame* frame);
+int bbsDigit(struct bbsFrame* framePtr);
 
 // bbsByte
 //

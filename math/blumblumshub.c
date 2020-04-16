@@ -2,22 +2,7 @@
 
 // blumblumshub.c
 
-#include <stdlib.h>
-
-const int BBS_PRIME_P = 1000003;
-const int BBS_PRIME_Q = 2001991;
-
-// struct bbsFrame
-//
-// Contains the modulus n and the
-//  current seed x to pass into
-//  Blum Blum Shub pseudorandom
-//  data generation functions
-struct bbsFrame
-{
-  long int x;
-  long int n;
-};
+#include "blumblumshub.h"
 
 // bbsInit
 //
@@ -26,10 +11,16 @@ struct bbsFrame
 //  and seed specified by caller
 struct bbsFrame* bbsInit(long int seed)
 {
-  struct bbsFrame* frame = malloc(sizeof(struct bbsFrame));
-  frame->n = BBS_PRIME_P * BBS_PRIME_Q;
-  frame->x = seed;
-  return frame;
+  struct bbsFrame* framePtr = malloc(sizeof(struct bbsFrame));
+  mpz_t p;
+  mpz_init_set_str(p, bbsPrimeP, 10);
+  mpz_t q;
+  mpz_init_set_str(q, bbsPrimeQ, 10);
+  mpz_init(framePtr->modulus);
+  mpz_mul(framePtr->modulus, p, q);
+  mpz_init(framePtr->seed);
+  mpz_set_ui(framePtr->seed, seed);
+  return framePtr;
 }
 
 // bbsDigit
@@ -37,10 +28,19 @@ struct bbsFrame* bbsInit(long int seed)
 // Updates the frame passed in and
 //  returns a pseudorandom digit,
 //  1 or 0.
-int bbsDigit(struct bbsFrame* frame)
+int bbsDigit(struct bbsFrame* framePtr)
 {
-  frame->x = (frame->x*frame->x)%(frame->n);
-  return frame->x%2;
+  mpz_t newSeed;
+  mpz_init(newSeed);
+  mpz_set(newSeed, framePtr->seed);
+  mpz_mul(newSeed, newSeed, newSeed);
+  mpz_mod(newSeed, newSeed, framePtr->modulus);
+  mpz_set(framePtr->seed, newSeed);
+  return mpz_odd_p(newSeed);
+  //FIXME in the process of gmpizing this func, and the next one
+
+  //long int  = (framePtr->x*framePtr->x)%(framePtr->n);
+  //return framePtr->x%2;
 }
 
 // bbsByte
@@ -52,7 +52,7 @@ char bbsByte(struct bbsFrame* frame)
   char byte = 0x0;
   for (int i = 0; i < 8; i++)
   {
-    byte += bbsDigit(frame) << i;
+    byte += (char) bbsDigit(frame) << i;
   }
   return byte;
 }
