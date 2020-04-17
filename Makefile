@@ -4,14 +4,17 @@ EFLAGS = gcc -g -Wall -O0     # to compile executables
 OFLAGS = gcc -g -Wall -O0 -c  # to compile objects
 LDLIBS = -lgmp
 
+fermatprimality.o:
+	$(OFLAGS) math/fermatprimality.h -o obj/fermatprimality.o $(LDLIBS)
+
 blumblumshub.o:
 	$(OFLAGS) math/blumblumshub.h -o obj/blumblumshub.o $(LDLIBS)
 
 largeinteger.o: blumblumshub.o
-	$(OFLAGS) math/largeinteger.c -o obj/largeinteger.o $(LDLIBS)
+	$(OFLAGS) math/largeinteger.h -o obj/largeinteger.o $(LDLIBS)
 
 #test: largeinteger.o blumblumshub.o
-test: blumblumshub.o
+test: largeinteger.o
 	$(EFLAGS) test.c -o bin/test $(LDLIBS)
 	./bin/test
 
