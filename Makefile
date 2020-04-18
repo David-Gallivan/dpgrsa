@@ -10,11 +10,14 @@ fermatprimality.o:
 blumblumshub.o:
 	$(OFLAGS) math/blumblumshub.h -o obj/blumblumshub.o $(LDLIBS)
 
-largeinteger.o: blumblumshub.o
+largeinteger.o:
 	$(OFLAGS) math/largeinteger.h -o obj/largeinteger.o $(LDLIBS)
 
+randomprime.o:
+	$(OFLAGS) math/randomprime.h -o obj/randomprime.o $(LDLIBS)
+
 #test: largeinteger.o blumblumshub.o
-test: largeinteger.o
+test:
 	$(EFLAGS) test.c -o bin/test $(LDLIBS)
 	./bin/test
 

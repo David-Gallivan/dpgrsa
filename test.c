@@ -5,6 +5,7 @@
 #include "math/blumblumshub.h"
 #include "math/largeinteger.h"
 #include "math/fermatprimality.h"
+#include "math/randomprime.h"
 #define BASE_TEN 10
 
 const char* mval = "1222333444555666777888999000";
@@ -40,13 +41,14 @@ int main(){
   printf("%d\n",isPseudoprime(m));
 
   printf("Now to find a prime number\n");
-  randomLargeDecimalInteger(m, 80, 23);
-  int count = 0;
-  while(!isPseudoprime(m))
-  {
-    mpz_add_ui(m, m, 1);
-    count++;
-  }
+//  randomLargeDecimalInteger(m, 80, 23);
+//  int count = 0;
+//  while(!isPseudoprime(m))
+//  {
+//    mpz_add_ui(m, m, 1);
+//    count++;
+//  }
+  int count = randomPrime(m, 80, 23);
   gmp_printf("It took %d tries to find:\n%Zd\n", count, m);
   return 0;
 }

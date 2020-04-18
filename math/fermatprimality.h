@@ -2,6 +2,9 @@
 
 // fermatprimality.h
 
+#ifndef __FERMATPRIMALITY_H__
+#define __FERMATPRIMALITY_H__
+
 #include <gmp.h>
 #include <stdlib.h>
 
@@ -29,3 +32,5 @@ int isPseudoprime(mpz_t n)
     return 1;
   }
 }
+
+#endif
