@@ -16,13 +16,26 @@ struct eeaResults {
 };
 
 // mpz_extendedEuclideanAlgorithm
-struct eeaResults* mpz_extendedEuclideanAlgorithm(mpz_t a, mpz_t b)
+struct eeaResults* mpz_extendedEuclideanAlgorithm(mpz_t A, mpz_t B)
 {
   // initialize results struct
   struct eeaResults* results = malloc(sizeof(struct eeaResults));
   mpz_init(results->gcd);
   mpz_init(results->x);
   mpz_init(results->y);
+
+  //copy the inputs so they don't get changed
+  mpz_t a, b;
+  mpz_init_set(a, A);
+  mpz_init_set(b, B);
+  
+  // if one input is zero, no-can-do
+  if(mpz_cmp_ui(a, 0)==0||mpz_cmp_ui(b, 0)==0)
+  {
+    if (DEBUG) gmp_printf("Fail! We don't do zeroes here!\n");
+    results->rounds = -1;  //failure
+    return results;
+  }
 
   // if a==b, gcd is a, x is 1, y is 0
   if (mpz_cmp(a, b) == 0)
@@ -105,4 +118,86 @@ struct eeaResults* mpz_extendedEuclideanAlgorithm(mpz_t a, mpz_t b)
   mpz_set(results->y, yp);
   results->rounds = i - 2;
   return results;
+}
+
+// mpz_relativelyPrime
+//
+// returns 1 if x and y are relatively prime
+//  otherwise returns 0
+// FIXME check rounds for errors? It shouldn't happen often...
+int mpz_relativelyPrime(mpz_t x, mpz_t y)
+{
+  struct eeaResults* results = mpz_extendedEuclideanAlgorithm(x, y);
+  if (results->rounds<0)
+  {
+    if (DEBUG) printf("EEA failed.\n");
+    return 1;
+  }
+  if (mpz_cmp_ui(results->gcd, 1)==0)  // if gcd == 1
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+// mpz_modularInverse
+//
+//
+int mpz_modularInverse(mpz_t a1, mpz_t a, mpz_t n)
+{
+  // initialize and check for bad input
+  mpz_t aModN;
+  mpz_init(aModN);
+  if (DEBUG) gmp_printf("Taking %Zd mod %Zd\n", a, n);
+  mpz_mod(aModN, a, n);
+  if (mpz_cmp(aModN, n) == 0)  // if a = n (mod n)
+  {
+    if (DEBUG) printf("a congruent to n: there is no inverse!\n");
+    return 1;
+  }
+
+  // run the EEA
+  struct eeaResults* results = mpz_extendedEuclideanAlgorithm(a, n);
+  if (results->rounds<0)
+  {
+    if (DEBUG) printf("EEA failed.\n");
+    return 1;
+  }
+  if (mpz_cmp_ui(results->gcd, 1))  // if gcd != 0
+  {
+    if (DEBUG) printf("a and n not relatively prime: there is no inverse!\n");
+    return 1;
+  }
+
+  // determine whether x or y gives the inverse
+  mpz_t xModN, yModN, xa, ya, xan, yan;
+  mpz_init(xModN); mpz_init(yModN); mpz_init(xa); mpz_init(ya); mpz_init(xan); mpz_init(yan);
+  mpz_mod(xModN, results->x, n);
+  mpz_mul(xa, xModN, aModN);
+  mpz_mod(xan, xa, n);
+  mpz_mod(yModN, results->y, n);
+  mpz_mul(ya, yModN, aModN);
+  mpz_mod(yan, ya, n);
+  if (DEBUG) gmp_printf("xan, yan: %Zd %Zd\n", yModN, ya, yan);
+  if (mpz_cmp_ui(xan, 1)==0)
+  {
+    if (DEBUG) gmp_printf("found it! %Zd\n", xModN);
+    mpz_set(a1, xModN);
+  }
+  else if (mpz_cmp_ui(yan, 1)==0)
+  {
+    if (DEBUG) gmp_printf("found it! %Zd\n", yModN);
+    mpz_set(a1, yModN);
+  }
+  else
+  {
+    if (DEBUG) printf("something is seriously wrong here.\n");
+    mpz_set_ui(a1, -1);
+    return 1;
+  }
+
+  return 0;
 }

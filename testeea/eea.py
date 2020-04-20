@@ -5,6 +5,8 @@
 import sys
 
 def EEA(a, b, show_steps=False):
+    if a==0 or b==0:
+        return (None, None, None)
     if a<b:
         tmp=a
         a=b
