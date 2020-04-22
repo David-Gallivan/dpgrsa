@@ -5,7 +5,6 @@
 #include <gmp.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include "math/largeinteger.h"
 #include "../math/randomprime.h"
 #include "../math/eea.h"
 
@@ -77,10 +76,10 @@ int main(int argc, char** argv)
   //write it all out!
   if (DEBUG) gmp_printf("e: %Zd\nd: %Zd\nn: %Zd\n", e, d, n);
   FILE *fp;
-  fp = fopen("public_key", "w+");
+  fp = fopen("public_key.txt", "w+");
   gmp_fprintf(fp, "%Zd\n%Zd\n", e, n);
   fclose(fp);
-  fp = fopen("private_key", "w+");
+  fp = fopen("private_key.txt", "w+");
   gmp_fprintf(fp, "%Zd\n", d);
 
   return 0;

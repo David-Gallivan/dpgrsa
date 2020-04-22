@@ -5,6 +5,7 @@
 #include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "readin.c"
 
 #define DEBUG 1
 
@@ -20,26 +21,16 @@ int main(int argc, char** argv)
 
   // read in the keys and ciphertext
   char *ciphertext, *eString, *nString, *dString;
-  size_t cLength, eLength, nLength, dLength;
-  FILE *fp, *copy;
-  printf("-1");
-  copy = fp = fopen(argv[1], "r");
-  printf("0");
-  getline(&ciphertext, &cLength, fp);
-  fclose(copy);
-  printf("1");
-  fp = fopen(argv[2], "r");
-  getline(&eString, &eLength, fp);
-  fp = fp;
-  getline(&nString, &nLength, fp);
-  fclose(fp);
-  printf("2");
-  fp = fopen(argv[3], "r");
-  getline(&dString, &dLength, fp);
-  fclose(fp);
-  printf("3");
+  ciphertext = 0;  //initializing to get rid of the warning
+  eString = 0;
+  nString = 0;
+  dString = 0;
+  readMessage(argv[1], &ciphertext);
+  readPublicKey(argv[2], &eString, &nString);
+  readPrivateKey(argv[3], &dString);
 
-  if (DEBUG) printf("read everything\n");
+
+  if (DEBUG) printf("c: %s\ne: %s\nn: %s\nd: %s\n", ciphertext, eString, nString, dString);
 
   // set all the integers
   mpz_t c, e, n, d, m;
@@ -56,7 +47,8 @@ int main(int argc, char** argv)
 
   // output
   if (DEBUG) gmp_printf("message: %Zd\n", m);
-  fp = fopen("decryptedmessage", "w");
+  FILE *fp;
+  fp = fopen("decryptedmessage.txt", "w");
   gmp_fprintf(fp, "%Zd\n", m);
   fclose(fp);
 

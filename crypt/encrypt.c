@@ -5,6 +5,7 @@
 #include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "readin.c"
 
 #define DEBUG 1
 
@@ -18,18 +19,9 @@ int main(int argc, char** argv)
 
   // read in the PUBLIC key and the message
   char *message, *eString, *nString;
-  size_t mLength, eLength, nLength;
-  FILE* fp;
-  if (DEBUG) printf("about to read stuff\n");
-  fp = fopen(argv[1], "r");
-  getline(&message, &mLength, fp);
-  fclose(fp);
-  if (DEBUG) printf("message read: %s\n", message);
-  fp = fopen(argv[2], "r");
-  getline(&eString, &eLength, fp);
-  getline(&nString, &nLength, fp);
-  fclose(fp);
-  if (DEBUG) printf("key read\n");
+  message = eString = nString = 0;
+  readMessage(argv[1], &message);
+  readPublicKey(argv[2], &eString, &nString);
 
   if (DEBUG) printf("m: %s\ne: %s\nn: %s\n", message, eString, nString);
 
@@ -45,7 +37,8 @@ int main(int argc, char** argv)
 
   // output
   if (DEBUG) gmp_printf("ciphertext: %Zd\n", ciphertext);
-  fp = fopen("ciphertext", "w");
+  FILE *fp;
+  fp = fopen("ciphertext.txt", "w");
   gmp_fprintf(fp, "%Zd\n", ciphertext);
   fclose(fp);
 
