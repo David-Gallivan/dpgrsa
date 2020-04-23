@@ -25,3 +25,4 @@ Known issues to fix as of April 2020:
  - Certain mathematical functions (see the math directory) are homemade
     and have not been thoroughly tested; however, they are available for
     export.
+ - Empty directories are not synced with the master branch
