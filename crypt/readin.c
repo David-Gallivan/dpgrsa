@@ -1,6 +1,10 @@
 //JMJ
 
 // readin.c
+// by David Gallivan
+
+// support functions for reading in keys and messages
+// TODO document better!
 
 #include <stdio.h>
 #include <stdlib.h>

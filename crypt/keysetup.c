@@ -1,6 +1,15 @@
 //JMJ
 
 // keySetup.c
+// by David Gallivan
+
+// Generates public and private keys for RSA.
+// Outputs public key to a file "public_key.txt" as
+// two base-ten numbers separated by a newline,
+// the first being e and the second n.
+// Outputs d to a file "private_key.txt".
+// Takes one optional command line argument, a seed
+// for the pseudorandom generator.
 
 #include <gmp.h>
 #include <stdlib.h>
@@ -12,7 +21,7 @@
 #define DEFAULT_SEED 7
 #define DEFAULT_E "65537"
 #define MINIMUM_DIFFERENCE_POWER 95//FIXME
-#define DEBUG 1
+#define DEBUG 0 
 
 int main(int argc, char** argv)
 {

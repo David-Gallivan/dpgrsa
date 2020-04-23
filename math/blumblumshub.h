@@ -1,6 +1,9 @@
 //JMJ
 
 // blumblumshub.h
+// by David Gallivan
+
+// functions for getting pseudorandom data
 
 #ifndef __BLUMBLUMSHUB_H__
 #define __BLUMBLUMSHUB_H__
@@ -9,6 +12,7 @@
 #include <stdio.h>
 #include <gmp.h>
 
+// These primes are used to generate a modulus
 const char* bbsPrimeP = "1000003";
 const char* bbsPrimeQ = "2001991";
 
@@ -17,7 +21,8 @@ const char* bbsPrimeQ = "2001991";
 // Contains the modulus n and the
 //  current seed x to pass into
 //  Blum Blum Shub pseudorandom
-//  data generation functions
+//  data generation functions;
+//  each bbs function updates the seed
 struct bbsFrame
 {
   mpz_t seed;  // Begins as the seed and is updated
@@ -32,9 +37,9 @@ struct bbsFrame
 struct bbsFrame* bbsInit(long int seed)
 {
   struct bbsFrame* framePtr = malloc(sizeof(struct bbsFrame));
-  mpz_t p;
+  mpz_t p;  // p: the first of two primes
   mpz_init_set_str(p, bbsPrimeP, 10);
-  mpz_t q;
+  mpz_t q;  // q: the second of two primes
   mpz_init_set_str(q, bbsPrimeQ, 10);
   mpz_init(framePtr->modulus);
   mpz_mul(framePtr->modulus, p, q);
@@ -45,7 +50,7 @@ struct bbsFrame* bbsInit(long int seed)
 
 // bbsBinaryDigit
 //
-// Updates the frame passed in and
+// Updates the seed of the frame passed in and
 //  returns a pseudorandom digit,
 //  1 or 0, as an integer.
 int bbsBinaryDigit(struct bbsFrame* framePtr)

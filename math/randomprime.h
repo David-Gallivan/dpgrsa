@@ -1,6 +1,9 @@
 //JMJ
 
 // randomprime.h
+// by David Gallivan
+
+// provides a function to generate large random primes
 
 #ifndef __RANDOMPRIME_H__
 #define __RANDOMPRIME_H__

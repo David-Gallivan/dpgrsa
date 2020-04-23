@@ -1,6 +1,9 @@
 //JMJ
 
 // largeinteger.h
+// by David Gallivan
+
+// functions for generating large pseudorandom integers
 
 #ifndef __LARGEINTEGERS_H__
 #define __LARGEINTEGERS_H__
@@ -21,8 +24,8 @@
 int nthPowerOfTwo(mpz_t power, int n)
 {
   char* initString = malloc(n+1);
-  memset(initString, ASCII_ONE, 1);
-  memset(initString + 1, ASCII_ZERO, n);
+  memset(initString, ASCII_ONE, 1);  // we begin a string with a '1'
+  memset(initString + 1, ASCII_ZERO, n);  // and fill the rest with zeroes
   mpz_init_set_str(power, initString, BASE_TWO);
   return 0;
 }
@@ -38,8 +41,8 @@ int randomLargeInteger(mpz_t x, int n, int seed)
 {
   struct bbsFrame* frame = bbsInit(seed);
   char* initString = malloc(n+1);
-  memset(initString, ASCII_ONE, 1);
-  for (int i = 0; i < n; i++)
+  memset(initString, ASCII_ONE, 1);  // we set the first char of the string to '1'
+  for (int i = 0; i < n; i++)        // and fill the rest with random ones and zeros
   {
     int digit = bbsBinaryDigit(frame);
     if (digit)

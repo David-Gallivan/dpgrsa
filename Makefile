@@ -22,6 +22,9 @@ largeinteger.o:
 randomprime.o:
 	$(OFLAGS) math/randomprime.h -o obj/randomprime.o $(LDLIBS)
 
+modexp.o:
+	$(OFLAGS) math/modexp.h -o obj/modexp.o $(LDLIBS)
+
 keysetup:
 	$(EFLAGS) crypt/keysetup.c -o bin/keysetup $(LDLIBS)
 
@@ -31,10 +34,11 @@ encrypt:
 decrypt:
 	$(EFLAGS) crypt/decrypt.c -o bin/decrypt $(LDLIBS)
 
-all: keysetup encrypt decrypt
+all: keysetup encrypt decrypt eea.o fermatprimality.o \
+       blumblumshub.o largeinteger.o randomprime.o modexp.o
 
 run: all
 	./run.sh
 
 clean:
-	rm bin/* obj/* testeea/*.exe *.txt
+	rm bin/* obj/* results/*

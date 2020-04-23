@@ -1,13 +1,23 @@
 //JMJ
 
 // decrypt.c
+// by David Gallivan
+
+// Decrypts an RSA ciphertext.
+// Ciphertext input must be a file with a single
+// base-10 integer in ASCII characters.
+// Public key input must be a file with two such
+// integers, separated by any character.
+// Private key input must be a file with one such integer.
+// Output will be "decrypted_message.txt"
 
 #include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "readin.c"
+#include "../math/modexp.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 int main(int argc, char** argv)
 {
@@ -43,12 +53,12 @@ int main(int argc, char** argv)
   if (DEBUG) printf("ints all set\n");
 
   // do the exponentiation
-  mpz_powm(m, c, d, n);
+  mpz_powm_h(m, c, d, n);
 
   // output
   if (DEBUG) gmp_printf("message: %Zd\n", m);
   FILE *fp;
-  fp = fopen("decryptedmessage.txt", "w");
+  fp = fopen("decrypted_message.txt", "w");
   gmp_fprintf(fp, "%Zd\n", m);
   fclose(fp);
 
