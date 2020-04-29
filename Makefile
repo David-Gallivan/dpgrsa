@@ -8,34 +8,43 @@ other:
 	echo "read the README"
 
 eea.o:
-	$(OFLAGS) math/eea.h -o obj/eea.o $(LDLIBS)
+	$(OFLAGS) alg/eea.h -o obj/eea.o $(LDLIBS)
 
 fermatprimality.o:
-	$(OFLAGS) math/fermatprimality.h -o obj/fermatprimality.o $(LDLIBS)
+	$(OFLAGS) alg/fermatprimality.h -o obj/fermatprimality.o $(LDLIBS)
 
 blumblumshub.o:
-	$(OFLAGS) math/blumblumshub.h -o obj/blumblumshub.o $(LDLIBS)
+	$(OFLAGS) alg/blumblumshub.h -o obj/blumblumshub.o $(LDLIBS)
 
 largeinteger.o:
-	$(OFLAGS) math/largeinteger.h -o obj/largeinteger.o $(LDLIBS)
+	$(OFLAGS) alg/largeinteger.h -o obj/largeinteger.o $(LDLIBS)
 
 randomprime.o:
-	$(OFLAGS) math/randomprime.h -o obj/randomprime.o $(LDLIBS)
+	$(OFLAGS) alg/randomprime.h -o obj/randomprime.o $(LDLIBS)
 
 modexp.o:
-	$(OFLAGS) math/modexp.h -o obj/modexp.o $(LDLIBS)
+	$(OFLAGS) alg/modexp.h -o obj/modexp.o $(LDLIBS)
+
+rsa.o:
+	$(OFLAGS) alg/modexp.h -o obj/rsa.o $(LDLIBS)
+
+# TODO: have it compile libraries, too
+#archive: rsa.o
+#	ar rc dpgrsa.a obj/rsa.o
+#	ranlib dpgrsa.a
 
 keysetup:
-	$(EFLAGS) crypt/keysetup.c -o bin/keysetup $(LDLIBS)
+	$(EFLAGS) test/keysetup.c -o bin/keysetup $(LDLIBS)
 
 encrypt:
-	$(EFLAGS) crypt/encrypt.c -o bin/encrypt $(LDLIBS)
+	$(EFLAGS) test/encrypt.c -o bin/encrypt $(LDLIBS)
 
 decrypt:
-	$(EFLAGS) crypt/decrypt.c -o bin/decrypt $(LDLIBS)
+	$(EFLAGS) test/decrypt.c -o bin/decrypt $(LDLIBS)
 
 all: keysetup encrypt decrypt eea.o fermatprimality.o \
-       blumblumshub.o largeinteger.o randomprime.o modexp.o
+       blumblumshub.o largeinteger.o randomprime.o modexp.o \
+       rsa.o 
 
 run: all
 	./run.sh
