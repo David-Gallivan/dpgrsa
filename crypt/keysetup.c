@@ -17,6 +17,8 @@
 #include "../math/randomprime.h"
 #include "../math/eea.h"
 
+#include "rsa.h"
+
 #define DEFAULT_DIGITS 100
 #define DEFAULT_SEED 7
 #define DEFAULT_E "65537"
@@ -42,6 +44,22 @@ int main(int argc, char** argv)
     }
   }
 
+  // Generate the key
+  struct publicKey *pu = malloc(sizeof(struct publicKey));
+  struct privateKey *pr = malloc(sizeof(struct privateKey));
+  generateKeys(pu, pr, digits, seed);
+
+  //write it all out!
+  //if (DEBUG) gmp_printf("e: %Zd\nd: %Zd\nn: %Zd\n", e, d, n);
+  FILE *fp;
+  fp = fopen("public_key.txt", "w+");
+  gmp_fprintf(fp, "%Zd\n%Zd\n", pu->e, pu->n);
+  fclose(fp);
+  fp = fopen("private_key.txt", "w+");
+  gmp_fprintf(fp, "%Zd\n", pr->d);
+
+
+/*
   // generate p
   mpz_t p;
   mpz_init(p);
@@ -90,6 +108,7 @@ int main(int argc, char** argv)
   fclose(fp);
   fp = fopen("private_key.txt", "w+");
   gmp_fprintf(fp, "%Zd\n", d);
+*/
 
   return 0;
 }
