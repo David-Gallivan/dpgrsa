@@ -43,3 +43,7 @@ Known issues to fix as of April 2020:
     technically prevent the precision from being arbitrary. For
     ordinary cryptographic purposes, they should never overflow, but it
     might be good to convert these to mpz types just in case.
+ - The public key exponent should be made chooseable, or at least its
+    length should; currently, it is 65537. So n has to be bigger.
+ - The length of p and q should be able to be chosen in binary as well
+    as in decimal digits.
