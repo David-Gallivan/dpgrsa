@@ -47,3 +47,7 @@ Known issues to fix as of April 2020:
     length should; currently, it is 65537. So n has to be bigger.
  - The length of p and q should be able to be chosen in binary as well
     as in decimal digits.
+ - As pointed out by Dr. T's grader, Nathan Arnold, several random bases
+    ought to be used for Fermat's primality test rather than just one;
+    the test is valid with just one, but we can have more confidence in
+    it if we use more than one.
