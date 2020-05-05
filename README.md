@@ -5,9 +5,11 @@ An implemetation of the RSA cryptosystem
 by David Patrick Gallivan
 
 The ultimate hope of the project is to become a C/C++ library providing
-RSA functionality. GMP's multiple precision integers are used so that the
-keys can be of arbitrary size, unlike most demonstrations of RSA that can
-be found online.
+RSA functionality that is reliable and efficient enough to utilize in 
+various kinds of projects but simple enough to be used as a demonstration
+of RSA, e.g. for students. GMP's multiple precision integers are used so
+that the keys can be of very large size, unlike many demonstrations of RSA
+that can be found online.
 
 This project began to fulfill several academic requirements in Spring 2020:
 First, assignment 7 of Dr. Truszczynski's CS378.
@@ -51,3 +53,7 @@ Known issues to fix as of April 2020:
     ought to be used for Fermat's primality test rather than just one;
     the test is valid with just one, but we can have more confidence in
     it if we use more than one.
+ - Testing shows that p and q can be up to at least 500 decimal digits
+    before the system fails. 600 decimal digits for p and q makes it
+    unreliable; too much larger than that crashes it. This means keys are
+    over 3,000 bits, but not quite 4096.
